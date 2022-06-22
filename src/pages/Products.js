@@ -10,9 +10,10 @@ function Products() {
     const [loading, setLoading] = useState(false);
     const [searchValue, setSearchValue] = useState("");
     const [componentMounted, setComponentMounted] = useState(true);
-    const [selectId, setSelectId] = useState(0);
+    const [selectId, setSelectId] = useState(1);
+    
 
-    const sortItems = [{title: "сортировать...", id: 0}, {title: "По убыванию цены", id: 1}, {title: "По возрастанию цены", id: 2}, {title: "По рейтингу", id: 3}];
+    const sortItems = [{title: "Сортировать...", id: 0}, {title: "По убыванию цены", id: 1}, {title: "По возрастанию цены", id: 2}];
     //при монтировании компоненты асинхронно подгружаем данные с продуктами
     useEffect(() => {
         const getProducts = async () => {
@@ -62,28 +63,25 @@ function Products() {
         setFilter(updateList);
     }
 
-    //сортирует продукты по цене или рейтингу
+    //сортирует продукты по цене
     const sortProduct = (value) => {
+        // console.log(filter);
+        if(+value === 0) return
         setSelectId(+value);
         let updateList;
         switch(selectId){
-            case 0: break;
             case 1: 
-            updateList = filter.sort((x, y) => x.price - y.price);
+            updateList = filter.sort((x, y) => +x.price - +y.price);
             setFilter(updateList);  
             break;
             case 2: 
-            updateList = filter.sort((x, y) => y.price - x.price);
+            updateList = filter.sort((x, y) => +y.price - +x.price);
             setFilter(updateList);  
             break;
-            case 3: 
-            updateList = filter.sort((x, y) => x.rating.rate - y.rating.rate);
-            setFilter(updateList);  
-            break;
-            default: break;
+            default: 
+            return;
         }
     }
-
     const ShowProducts = () => {
         return (
             <>
@@ -136,7 +134,7 @@ function Products() {
                                 <button className='btn btn-outline-dark me-2' onClick={(e) => searchProduct(searchValue)}>Найти</button>
                             </div>
                             <div className="input-group justify-content-center mb-3 pb-3" style={{ marginTop: "30px", width: "50%" }}>
-                                <select onChange={e => sortProduct(e.target.value)} class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon" >
+                                <select onChange={e => sortProduct(e.target.value)} className="form-select" id="inputGroupSelect04" aria-label="Example select with button addon" >
                                     {sortItems.map((item, key) => (
                                         <option key={key} value={item.id} label={item.title} />
                                     ))}
