@@ -10,7 +10,9 @@ function Products() {
     const [loading, setLoading] = useState(false);
     const [searchValue, setSearchValue] = useState("");
     const [componentMounted, setComponentMounted] = useState(true);
+    const [selectId, setSelectId] = useState(0);
 
+    const sortItems = [{title: "сортировать...", id: 0}, {title: "По убыванию цены", id: 1}, {title: "По возрастанию цены", id: 2}, {title: "По рейтингу", id: 3}];
     //при монтировании компоненты асинхронно подгружаем данные с продуктами
     useEffect(() => {
         const getProducts = async () => {
@@ -20,7 +22,6 @@ function Products() {
                 setData(await response.clone().json());
                 setFilter(await response.json());
                 setLoading(false);
-                console.log(filter);
             }
             return () => {
                 setComponentMounted(false);
@@ -57,15 +58,37 @@ function Products() {
 
     //ищет продукты по названию
     const searchProduct = (value) => {
-        const updateList = data.filter((x) => x.title.toLowerCase().trim().includes(value.toLowerCase().trim()));
+        const updateList = filter.filter((x) => x.title.toLowerCase().trim().includes(value.toLowerCase().trim()));
         setFilter(updateList);
+    }
+
+    //сортирует продукты по цене или рейтингу
+    const sortProduct = (value) => {
+        setSelectId(+value);
+        let updateList;
+        switch(selectId){
+            case 0: break;
+            case 1: 
+            updateList = filter.sort((x, y) => x.price - y.price);
+            setFilter(updateList);  
+            break;
+            case 2: 
+            updateList = filter.sort((x, y) => y.price - x.price);
+            setFilter(updateList);  
+            break;
+            case 3: 
+            updateList = filter.sort((x, y) => x.rating.rate - y.rating.rate);
+            setFilter(updateList);  
+            break;
+            default: break;
+        }
     }
 
     const ShowProducts = () => {
         return (
             <>
 
-            {/* список доступных категорий */}
+                {/* список доступных категорий */}
                 <div className='buttons d-flex justify-content-center mb-3 pb-3'>
                     <button className='btn btn-outline-dark me-2' onClick={() => setFilter(data)}>Показать все</button>
                     <button className='btn btn-outline-dark me-2' onClick={() => filterProduct("men's clothing")}>Мужская одежда</button>
@@ -77,18 +100,18 @@ function Products() {
                 {/* выводим продукты */}
                 {filter.map((product, index) => {
                     return (
-                        
-                            <div className="col-md-3 mb-4" key={index}>
-                                <div className="card h-100 text-center p-4" key={product.id}>
-                                    <img src={product.image} className="card-img-top" alt={product.title} height="250px" />
-                                    <div className="card-body">
-                                        <h5 className="card-title mb-0">{product.title.substring(0, 12)}...</h5>
-                                        <p className="card-text lead fw-bold">${product.price}</p>
-                                        <Link to={`/products/${product.id}`} className="btn btn-outline-dark">Купить</Link>
-                                    </div>
+
+                        <div className="col-md-3 mb-4" key={index}>
+                            <div className="card h-100 text-center p-4" key={product.id}>
+                                <img src={product.image} className="card-img-top" alt={product.title} height="250px" />
+                                <div className="card-body">
+                                    <h5 className="card-title mb-0">{product.title.substring(0, 12)}...</h5>
+                                    <p className="card-text lead fw-bold">${product.price}</p>
+                                    <Link to={`/products/${product.id}`} className="btn btn-outline-dark">Купить</Link>
                                 </div>
                             </div>
-                        
+                        </div>
+
                     )
                 })}
             </>
@@ -106,14 +129,21 @@ function Products() {
                 </div>
 
                 <div className='row justify-content-center'>
-                    {loading ? <Loading /> : 
-                    <>
-                        <div className='d-flex justify-content-center mb-3 pb-3'>
-                            <input onChange={(e) => setSearchValue(e.target.value)} type="search" className="form-control me-2 ms-1" placeholder="Найти" value={searchValue} />
-                            <button className='btn btn-outline-dark me-2' onClick={(e) => searchProduct(searchValue)}>Найти</button>
-                        </div>
-                        <ShowProducts /> 
-                    </>
+                    {loading ? <Loading /> :
+                        <>
+                            <div className='d-flex justify-content-center mb-3 pb-3'>
+                                <input onChange={(e) => setSearchValue(e.target.value)} type="search" className="form-control me-2 ms-1" placeholder="Найти" value={searchValue} />
+                                <button className='btn btn-outline-dark me-2' onClick={(e) => searchProduct(searchValue)}>Найти</button>
+                            </div>
+                            <div className="input-group justify-content-center mb-3 pb-3" style={{ marginTop: "30px", width: "50%" }}>
+                                <select onChange={e => sortProduct(e.target.value)} class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon" >
+                                    {sortItems.map((item, key) => (
+                                        <option key={key} value={item.id} label={item.title} />
+                                    ))}
+                                </select>
+                            </div>
+                            <ShowProducts />
+                        </>
                     }
                 </div>
             </div>

@@ -14,8 +14,8 @@ const About = () => {
                         </p>
                         <Link to="/contact" className="btn btn-outline-dark px-3">Контакты</Link>
                     </div>
-                    <div className="col-md-6 d-flex justify-content-center">
-                        <img src="/assets/about.png" alt="About Us" height="400px" width="800px" />
+                    <div className="col-md-6 d-flex justify-content-center mt-3 pb-3">
+                        <img src="/assets/about.png" alt="About Us" height="50%" width="80%" />
                     </div>
                 </div>
             </div>

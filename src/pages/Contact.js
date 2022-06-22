@@ -53,34 +53,35 @@ const Contact = observer(() => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-md 5 d-flex justify-content-center">
-                        <img src="/assets/contact.png" alt="Contact Us" height="400px" width="300px" />
+
+                    <div className="col-md-6 d-flex justify-content-center mt-3 pb-3">
+                        <img src="/assets/contact.png" alt="Contact Us" height="60%" width="50%" />
                     </div>
                     <div className="col-md-6">
                         <form onSubmit={(e) => { submitHandler(e) }}>
                             <div className="mb-3">
                                 <label htmlFor="exampleForm" className="form-label">Тема</label>
-                                <input onChange={(e) => setTheme(e.target.value)} type="text" className="form-control" id="exampleForm" 
-                                placeholder="Тема" pattern=".{5,15}" title="от 5 до 15 символов" required/>
+                                <input onChange={(e) => setTheme(e.target.value)} type="text" className="form-control" id="exampleForm"
+                                    placeholder="Тема" pattern=".{5,15}" title="от 5 до 15 символов" required />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="exampleForm1" className="form-label">Полное имя</label>
-                                <input onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleForm1" 
-                                placeholder="Омаров Бауржан" pattern=".{5,15}" title="от 5 до 15 символов" required/>
+                                <input onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleForm1"
+                                    placeholder="Омаров Бауржан" pattern=".{5,15}" title="от 5 до 15 символов" required />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="exampleFormControlInput1" className="form-label">Email</label>
-                                <input onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" 
-                                placeholder="you@example.com" id="exampleFormControlInput1" value={email} required/>
+                                <input onChange={(e) => setEmail(e.target.value)} type="email" className="form-control"
+                                    placeholder="you@example.com" id="exampleFormControlInput1" value={email} required />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="exampleFormControlInput3" className="form-label">Телефон</label>
-                                <input onChange={(e) => setPhone(e.target.value)} type="tel" pattern="\+\d-\d{3}-\d{3}-\d{4}" className="form-control" 
-                                placeholder="+7-234-567-8901" id="exampleFormControlInput3" required/>
+                                <input onChange={(e) => setPhone(e.target.value)} type="tel" pattern="\+\d-\d{3}-\d{3}-\d{4}" className="form-control"
+                                    placeholder="+7-234-567-8901" id="exampleFormControlInput3" required />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="exampleFormControlTextarea1" className="form-label">Текст сообщения</label>
-                                <textarea onChange={(e) => setText(e.target.value)} className="form-control" id="exampleFormControlTextarea1" rows="5" required/>
+                                <textarea onChange={(e) => setText(e.target.value)} className="form-control" id="exampleFormControlTextarea1" rows="5" required />
                             </div>
                             <p style={{ color: message.color }}>{message.text}</p>
                             <button type="submit" className="btn btn-outline-dark">Отправить</button>
