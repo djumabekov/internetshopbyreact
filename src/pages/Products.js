@@ -10,10 +10,10 @@ function Products() {
     const [loading, setLoading] = useState(false);
     const [searchValue, setSearchValue] = useState("");
     const [componentMounted, setComponentMounted] = useState(true);
-    const [selectId, setSelectId] = useState(1);
-    
+    const [selectId, setSelectId] = useState(null);
 
-    const sortItems = [{title: "Сортировать...", id: 0}, {title: "По убыванию цены", id: 1}, {title: "По возрастанию цены", id: 2}];
+
+    const sortItems = [{ title: "Сортировать...", type: null }, { title: "По убыванию цены", type: "desc" }, { title: "По возрастанию цены", type: "asc" }, { title: "По рейтингу", type: "rate" }];
     //при монтировании компоненты асинхронно подгружаем данные с продуктами
     useEffect(() => {
         const getProducts = async () => {
@@ -63,25 +63,21 @@ function Products() {
         setFilter(updateList);
     }
 
-    //сортирует продукты по цене
+    //сортирует продукты по цене или рейтингу
     const sortProduct = (value) => {
-        // console.log(filter);
-        if(+value === 0) return
-        setSelectId(+value);
-        let updateList;
-        switch(selectId){
-            case 1: 
-            updateList = filter.sort((x, y) => +x.price - +y.price);
-            setFilter(updateList);  
-            break;
-            case 2: 
-            updateList = filter.sort((x, y) => +y.price - +x.price);
-            setFilter(updateList);  
-            break;
-            default: 
-            return;
-        }
+        if (value === null) return
+        setSelectId(value);
+        console.log(filter);
+        let updateList = filter;
+        if (value === "desc")
+            updateList = filter.sort((x, y) => x.price - y.price);
+        if (value === "asc")
+            updateList = filter.sort((x, y) => y.price - x.price);
+        if (value === "rate")
+            updateList = filter.sort((x, y) => y.rating.rate - x.rating.rate);
+        setFilter(updateList);
     }
+
     const ShowProducts = () => {
         return (
             <>
@@ -136,7 +132,7 @@ function Products() {
                             <div className="input-group justify-content-center mb-3 pb-3" style={{ marginTop: "30px", width: "50%" }}>
                                 <select onChange={e => sortProduct(e.target.value)} className="form-select" id="inputGroupSelect04" aria-label="Example select with button addon" >
                                     {sortItems.map((item, key) => (
-                                        <option key={key} value={item.id} label={item.title} />
+                                        <option key={key} value={item.type} label={item.title} />
                                     ))}
                                 </select>
                             </div>
